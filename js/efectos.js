@@ -4,7 +4,7 @@ $(document).ready(function(){
 	var acercaDe = $('#acerca-de').offset().top,
 		menu = $('#platillos').offset().top,
 		galeria = $('#galeria').offset().top,
-		ubicacion = $('#ubicacion').offset().top;
+		ubicacion = $('#horarios').offset().top;
 
 // Boton Acerca de
 	$('#btn-acerca-de').on('click', function(e){
