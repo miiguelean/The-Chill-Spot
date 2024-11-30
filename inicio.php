@@ -39,7 +39,7 @@ function obtenerUsername($pdo, $userId) {
           <a href="#" id="btn-galeria">Galería</a>
           <a href="#" id="btn-ubicacion">Ubicación</a>
           <?php if ($username): ?>
-            <a href="perfil.php" class="nav-username">Bienvenido, <?= htmlspecialchars($username); ?></a>
+            <a href="perfil.php" class="nav-username">Bienvenid@, <?= htmlspecialchars($username); ?></a>
           <?php else: ?>
             <a href="index.php" class="login-link">Iniciar sesión</a>
           <?php endif; ?>
