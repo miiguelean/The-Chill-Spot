@@ -22,36 +22,25 @@ const analytics = getAnalytics(app);
 const messaging = getMessaging(app);
 
 // Registrar tu Service Worker
-navigator.serviceWorker.register('sw.js').then((registration) => {
-    console.log('Service Worker registrado:', registration);
+navigator.serviceWorker.register('/The-Chill-Spot/sw.js').then((registration) => {
+  console.log('Service Worker registrado:', registration);
 
-    // Solicitar permiso para recibir notificaciones
-    Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-            console.log('Permiso otorgado para notificaciones.');
-
-            // Obtener el token de registro para enviar notificaciones
-            getToken(messaging, {
-                vapidKey: 'BGvxRdsdfnqOKKjJCOnLNe6Fc7xJdn9pxhXnxOKJNWyuzOGsyH9715HfZlP254QaIxm4VpKpYI4AjvgeUjbWYtY',
-                serviceWorkerRegistration: registration
-            }).then(currentToken => {
-                if (currentToken) {
-                    console.log('Token del dispositivo:', currentToken);
-
-                    // Aquí puedes enviar este token a tu servidor para que lo almacene
-                } else {
-                    console.log('No se pudo obtener el token.');
-                }
-            }).catch(err => {
-                console.error('Error al obtener el token:', err);
-            });
-        } else {
-            console.log('Permiso denegado para notificaciones.');
-        }
-    });
-
+  // Pasar la referencia del registro al método getToken
+  getToken(messaging, {
+      vapidKey: 'BGvxRdsdfnqOKKjJCOnLNe6Fc7xJdn9pxhXnxOKJNWyuzOGsyH9715HfZlP254QaIxm4VpKpYI4AjvgeUjbWYtY',
+      serviceWorkerRegistration: registration
+  }).then((currentToken) => {
+      if (currentToken) {
+          console.log('Token del dispositivo:', currentToken);
+          // Enviar el token al servidor o usarlo según tu lógica
+      } else {
+          console.log('No se pudo obtener el token.');
+      }
+  }).catch((err) => {
+      console.error('Error al obtener el token:', err);
+  });
 }).catch((error) => {
-    console.error('Error al registrar el Service Worker:', error);
+  console.error('Error al registrar el Service Worker:', error);
 });
 
 console.log("Firebase inicializado correctamente.");
