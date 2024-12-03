@@ -51,11 +51,18 @@ document.getElementById('btn-notificar').addEventListener('click', () => {
   obtenerToken();
 });
 
-// Comprobar si el Service Worker está registrado correctamente
+// Registrar el Service Worker para las notificaciones push de Firebase
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').then((registration) => {
-    console.log('Service Worker registrado con éxito:', registration);
+  navigator.serviceWorker.register('/firebase-messaging-sw.js').then((registration) => {
+    console.log('Firebase Messaging Service Worker registrado con éxito:', registration);
   }).catch((error) => {
-    console.log('Error al registrar el Service Worker:', error);
+    console.log('Error al registrar el Firebase Messaging Service Worker:', error);
+  });
+  
+  // Opcional: Registrar otro Service Worker para otras funcionalidades como caché, si tienes un sw.js adicional
+  navigator.serviceWorker.register('/sw.js').then((registration) => {
+    console.log('Service Worker de caché registrado con éxito:', registration);
+  }).catch((error) => {
+    console.log('Error al registrar el Service Worker de caché:', error);
   });
 }
