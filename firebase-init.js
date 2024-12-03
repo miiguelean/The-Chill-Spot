@@ -22,25 +22,31 @@ const analytics = getAnalytics(app);
 const messaging = getMessaging(app);
 
 // Registrar tu Service Worker
-navigator.serviceWorker.register('/The-Chill-Spot/sw.js').then((registration) => {
-  console.log('Service Worker registrado:', registration);
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('firebase-messaging-sw.js')
+    .then((registration) => {
+      console.log('Service Worker registrado con éxito:', registration);
 
-  // Pasar la referencia del registro al método getToken
-  getToken(messaging, {
-      vapidKey: 'BGvxRdsdfnqOKKjJCOnLNe6Fc7xJdn9pxhXnxOKJNWyuzOGsyH9715HfZlP254QaIxm4VpKpYI4AjvgeUjbWYtY',
-      serviceWorkerRegistration: registration
-  }).then((currentToken) => {
-      if (currentToken) {
+      // Obtener el token utilizando el registro del Service Worker
+      getToken(messaging, {
+        vapidKey: 'BGvxRdsdfnqOKKjJCOnLNe6Fc7xJdn9pxhXnxOKJNWyuzOGsyH9715HfZlP254QaIxm4VpKpYI4AjvgeUjbWYtY',
+        serviceWorkerRegistration: registration
+      }).then((currentToken) => {
+        if (currentToken) {
           console.log('Token del dispositivo:', currentToken);
-          // Enviar el token al servidor o usarlo según tu lógica
-      } else {
+        } else {
           console.log('No se pudo obtener el token.');
-      }
-  }).catch((err) => {
-      console.error('Error al obtener el token:', err);
-  });
-}).catch((error) => {
-  console.error('Error al registrar el Service Worker:', error);
-});
+        }
+      }).catch((err) => {
+        console.error('Error al obtener el token:', err);
+      });
+    })
+    .catch((error) => {
+      console.error('Error al registrar el Service Worker:', error);
+    });
+} else {
+  console.log('El navegador no soporta Service Workers.');
+}
+
 
 console.log("Firebase inicializado correctamente.");
