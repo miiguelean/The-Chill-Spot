@@ -71,38 +71,4 @@ define(["./workbox-48867127"], function (e) {
       ],
       { ignoreURLParametersMatching: [/^utm_/, /^fbclid$/] }
     );
-  // Evento de push para recibir notificaciones
-  self.addEventListener("push", (event) => {
-    // Extrae los datos de la notificación del evento push
-    const data = event.data ? event.data.json() : {};
-
-    // Configura los detalles de la notificación
-    const options = {
-      body: data.body || "Tienes una nueva notificación.",
-      icon: data.icon || "/img/icon-192x192.png",
-      badge: data.badge || "/img/icon-192x192.png",
-      data: data.data || {}, // Datos adicionales
-    };
-
-    // Muestra la notificación
-    event.waitUntil(
-      self.registration.showNotification(data.title || "Notificación", options)
-    );
-  });
-
-  // Manejo de clics en las notificaciones
-  self.addEventListener("notificationclick", (event) => {
-    event.notification.close();
-
-    const targetUrl = event.notification.data.url || "/";
-    event.waitUntil(
-      clients.matchAll({ type: "window" }).then((clientsArr) => {
-        const client = clientsArr.find(
-          (c) => c.url === targetUrl && "focus" in c
-        );
-        if (client) return client.focus();
-        if (clients.openWindow) return clients.openWindow(targetUrl);
-      })
-    );
-  });
 });

@@ -205,45 +205,11 @@
       </div>
     </footer>
 
-    <script type="module">
-      import PusherPushNotifications from "https://unpkg.com/@pusher/push-notifications-web";
-    
-      // Registrar el service worker
+    <script>
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("sw.js")
-          .then((registration) => {
-            console.log("Service Worker registrado con éxito:", registration);
-    
-            // Inicializar el cliente de Pusher Beams
-            const beamsClient = new PusherPushNotifications.Client({
-              instanceId: "b37697e7-0a9b-44e7-8dfe-a7b4d67976cc",
-            });
-    
-            beamsClient
-              .start()
-              .then(() => beamsClient.addDeviceInterest("general")) // Suscribirse a 'general'
-              .then(() => console.log("Suscripción exitosa a 'general'"))
-              .catch((error) => console.error("Error al suscribirse a Beams:", error));
-          })
-          .catch((error) => {
-            console.error("Error al registrar el Service Worker:", error);
-          });
-      } else {
-        console.warn("Service Workers no son compatibles con este navegador.");
+        navigator.serviceWorker.register("sw.js");
       }
-    
-      // Solicitar permiso para notificaciones
-      if ("Notification" in window && navigator.serviceWorker) {
-        Notification.requestPermission().then(function (permission) {
-          if (permission === "granted") {
-            console.log("Permiso de notificación concedido");
-          } else {
-            console.log("Permiso de notificación denegado");
-          }
-        });
-      }
-    </script>    
+    </script>
     <script src="js/jquery-1.12.3.min.js"></script>
     <script src="js/parallax.js"></script>
     <script src="js/efectos.js"></script>
