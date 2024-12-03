@@ -207,6 +207,7 @@
     </footer>
 
     <script type="module">
+      // Importar las funciones necesarias desde Firebase
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
       import {
@@ -214,62 +215,72 @@
         getToken,
         onMessage,
       } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-messaging.js";
-
+    
       // Configuración de Firebase
       const firebaseConfig = {
         apiKey: "AIzaSyCLATOoJaHm1ik6fCWHJYAkPgIhMQ5B5O4",
         authDomain: "the-chill-spot-b94ae.firebaseapp.com",
         projectId: "the-chill-spot-b94ae",
-        storageBucket: "the-chill-spot-b94ae.firebasestorage.app",
+        storageBucket: "the-chill-spot-b94ae.appspot.com",
         messagingSenderId: "519997067329",
         appId: "1:519997067329:web:023cffe155db50c797f6c0",
         measurementId: "G-NS2XWVYFF2",
       };
-
-      // Inicializar Firebase
+    
+      // Inicializar Firebase y sus servicios
       const app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(app);
-
-      // Inicializar el servicio de mensajería
       const messaging = getMessaging(app);
-
-      // Solicitar permiso para recibir notificaciones
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          console.log("Permiso otorgado para notificaciones.");
-
-          // Obtener el token de registro para enviar notificaciones
-          getToken(messaging, {
-            vapidKey:
-              "BGvxRdsdfnqOKKjJCOnLNe6Fc7xJdn9pxhXnxOKJNWyuzOGsyH9715HfZlP254QaIxm4VpKpYI4AjvgeUjbWYtY",
-          })
-            .then((currentToken) => {
-              if (currentToken) {
-                console.log("Token del dispositivo:", currentToken);
-              } else {
-                console.log("No se pudo obtener el token.");
-              }
+    
+      // Solicitar permiso para notificaciones
+      Notification.requestPermission()
+        .then((permission) => {
+          if (permission === "granted") {
+            console.log("Permiso otorgado para notificaciones.");
+    
+            // Obtener el token del dispositivo para enviar notificaciones
+            getToken(messaging, {
+              vapidKey: "BGvxRdsdfnqOKKjJCOnLNe6Fc7xJdn9pxhXnxOKJNWyuzOGsyH9715HfZlP254QaIxm4VpKpYI4AjvgeUjbWYtY",
             })
-            .catch((err) => {
-              console.error("Error al obtener el token:", err);
-            });
-        } else {
-          console.log("Permiso denegado para notificaciones.");
-        }
-      });
-
-      // Código para el registro del service worker
+              .then((currentToken) => {
+                if (currentToken) {
+                  console.log("Token del dispositivo:", currentToken);
+                  // Aquí podrías enviar el token al servidor
+                } else {
+                  console.warn("No se pudo obtener el token.");
+                }
+              })
+              .catch((err) => {
+                console.error("Error al obtener el token:", err);
+              });
+          } else {
+            console.warn("Permiso denegado para notificaciones.");
+          }
+        })
+        .catch((err) => {
+          console.error("Error al solicitar permiso para notificaciones:", err);
+        });
+    
+      // Registrar el service worker
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
           .register("sw.js")
-          .then(function (registration) {
-            console.log("Service Worker registrado:", registration);
+          .then((registration) => {
+            console.log("Service Worker registrado con éxito:", registration);
+    
+            // Escuchar mensajes desde el Service Worker
+            messaging.onMessage((payload) => {
+              console.log("Mensaje recibido:", payload);
+              // Aquí podrías mostrar una notificación personalizada
+            });
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.error("Error al registrar el Service Worker:", error);
           });
+      } else {
+        console.warn("Service Workers no son compatibles con este navegador.");
       }
-    </script>
+    </script>    
     <script src="js/jquery-1.12.3.min.js"></script>
     <script src="js/parallax.js"></script>
     <script src="js/efectos.js"></script>
