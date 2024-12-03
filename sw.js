@@ -72,5 +72,5 @@ define(["./workbox-48867127"], function (e) {
       ],
       { ignoreURLParametersMatching: [/^utm_/, /^fbclid$/] }
     );
-    importScripts("firebase-messaging-sw.js");
+    importScripts("/The-Chill-Spot/firebase-messaging-sw.js");
 });
