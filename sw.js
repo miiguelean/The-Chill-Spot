@@ -1,18 +1,19 @@
 if (!self.define) {
-  let e, i = {};
+  let e,
+      i = {};
   const r = (r, s) => (
     (r = new URL(r + ".js", s).href),
     i[r] ||
-      new Promise((i) => {
-        if ("document" in self) {
-          const e = document.createElement("script");
-          (e.src = r), (e.onload = i), document.head.appendChild(e);
-        } else (e = r), importScripts(r), i();
-      }).then(() => {
-        let e = i[r];
-        if (!e) throw new Error("Module ${r} didn’t register its module");
-        return e;
-      })
+        new Promise((i) => {
+          if ("document" in self) {
+            const e = document.createElement("script");
+            (e.src = r), (e.onload = i), document.head.appendChild(e);
+          } else (e = r), importScripts(r), i();
+        }).then(() => {
+          let e = i[r];
+          if (!e) throw new Error(`Module ${r} didn’t register its module`);
+          return e;
+        })
   );
   self.define = (s, f) => {
     const o =
@@ -22,29 +23,13 @@ if (!self.define) {
     if (i[o]) return;
     let n = {};
     const b = (e) => r(e, o),
-      c = { module: { uri: o }, exports: n, require: b };
+          c = { module: { uri: o }, exports: n, require: b };
     i[o] = Promise.all(s.map((e) => c[e] || b(e))).then((e) => (f(...e), n));
   };
 }
+
 define(["./workbox-48867127"], function (e) {
   "use strict";
-  // Firebase configuration
-  importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js');
-  importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js');
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCLATOoJaHm1ik6fCWHJYAkPgIhMQ5B5O4",
-    authDomain: "the-chill-spot-b94ae.firebaseapp.com",
-    projectId: "the-chill-spot-b94ae",
-    storageBucket: "the-chill-spot-b94ae.firebasestorage.app",
-    messagingSenderId: "519997067329",
-    appId: "1:519997067329:web:023cffe155db50c797f6c0",
-    measurementId: "G-NS2XWVYFF2"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const messaging = firebase.messaging();
-
   self.addEventListener("message", (e) => {
     e.data && "SKIP_WAITING" === e.data.type && self.skipWaiting();
   });
@@ -88,17 +73,4 @@ define(["./workbox-48867127"], function (e) {
     ],
     { ignoreURLParametersMatching: [/^utm_/, /^fbclid$/] }
   );
-  
-  messaging.onBackgroundMessage(function(payload) {
-    console.log('Recibido mensaje en segundo plano:', payload);
-
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-      body: payload.notification.body,
-      icon: payload.notification.icon,
-      badge: payload.notification.badge
-    };
-
-    self.registration.showNotification(notificationTitle, notificationOptions);
-  });
 });
