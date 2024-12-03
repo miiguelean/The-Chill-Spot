@@ -1,7 +1,7 @@
 {
     "name": "The Chill Spot",
     "short_name": "The Chill Spot",
-    "start_url": "/The-Chill-Spot/",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000000",
