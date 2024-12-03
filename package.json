@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@pusher/push-notifications-server": "^1.2.6",
+    "@pusher/push-notifications-web": "^1.1.0"
+  }
+}

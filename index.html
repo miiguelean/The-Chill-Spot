@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="css/estilos.css" />
     <link rel="manifest" href="manifest.json" />
     <title>The Chill Spot</title>
-    <!-- <script type="module" src="firebase-init.js"></script> -->
   </head>
 
   <body>
@@ -207,59 +206,7 @@
     </footer>
 
     <script type="module">
-      // Importar las funciones necesarias desde Firebase
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
-      import {
-        getMessaging,
-        getToken,
-        onMessage,
-      } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-messaging.js";
-    
-      // Configuración de Firebase
-      const firebaseConfig = {
-        apiKey: "AIzaSyCLATOoJaHm1ik6fCWHJYAkPgIhMQ5B5O4",
-        authDomain: "the-chill-spot-b94ae.firebaseapp.com",
-        projectId: "the-chill-spot-b94ae",
-        storageBucket: "the-chill-spot-b94ae.appspot.com",
-        messagingSenderId: "519997067329",
-        appId: "1:519997067329:web:023cffe155db50c797f6c0",
-        measurementId: "G-NS2XWVYFF2",
-      };
-    
-      // Inicializar Firebase y sus servicios
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-      const messaging = getMessaging(app);
-    
-      // Solicitar permiso para notificaciones
-      Notification.requestPermission()
-        .then((permission) => {
-          if (permission === "granted") {
-            console.log("Permiso otorgado para notificaciones.");
-    
-            // Obtener el token del dispositivo para enviar notificaciones
-            getToken(messaging, {
-              vapidKey: "BGvxRdsdfnqOKKjJCOnLNe6Fc7xJdn9pxhXnxOKJNWyuzOGsyH9715HfZlP254QaIxm4VpKpYI4AjvgeUjbWYtY",
-            })
-              .then((currentToken) => {
-                if (currentToken) {
-                  console.log("Token del dispositivo:", currentToken);
-                  // Aquí podrías enviar el token al servidor
-                } else {
-                  console.warn("No se pudo obtener el token.");
-                }
-              })
-              .catch((err) => {
-                console.error("Error al obtener el token:", err);
-              });
-          } else {
-            console.warn("Permiso denegado para notificaciones.");
-          }
-        })
-        .catch((err) => {
-          console.error("Error al solicitar permiso para notificaciones:", err);
-        });
+      import PusherPushNotifications from "https://unpkg.com/@pusher/push-notifications-web";
     
       // Registrar el service worker
       if ("serviceWorker" in navigator) {
@@ -268,17 +215,33 @@
           .then((registration) => {
             console.log("Service Worker registrado con éxito:", registration);
     
-            // Escuchar mensajes desde el Service Worker
-            messaging.onMessage((payload) => {
-              console.log("Mensaje recibido:", payload);
-              // Aquí podrías mostrar una notificación personalizada
+            // Inicializar el cliente de Pusher Beams
+            const beamsClient = new PusherPushNotifications.Client({
+              instanceId: "b37697e7-0a9b-44e7-8dfe-a7b4d67976cc",
             });
+    
+            beamsClient
+              .start()
+              .then(() => beamsClient.addDeviceInterest("general")) // Suscribirse a 'general'
+              .then(() => console.log("Suscripción exitosa a 'general'"))
+              .catch((error) => console.error("Error al suscribirse a Beams:", error));
           })
           .catch((error) => {
             console.error("Error al registrar el Service Worker:", error);
           });
       } else {
         console.warn("Service Workers no son compatibles con este navegador.");
+      }
+    
+      // Solicitar permiso para notificaciones
+      if ("Notification" in window && navigator.serviceWorker) {
+        Notification.requestPermission().then(function (permission) {
+          if (permission === "granted") {
+            console.log("Permiso de notificación concedido");
+          } else {
+            console.log("Permiso de notificación denegado");
+          }
+        });
       }
     </script>    
     <script src="js/jquery-1.12.3.min.js"></script>
