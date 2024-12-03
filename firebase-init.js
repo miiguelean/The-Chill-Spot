@@ -23,7 +23,7 @@ const messaging = getMessaging(app);
 
 // Registrar tu Service Worker
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('firebase-messaging-sw.js')
+  navigator.serviceWorker.register('/The-Chill-Spot/firebase-messaging-sw.js')
     .then((registration) => {
       console.log('Service Worker registrado con éxito:', registration);
 
