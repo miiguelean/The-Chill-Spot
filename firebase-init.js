@@ -1,7 +1,7 @@
 // Importar las bibliotecas necesarias de Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
-import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-messaging.js";
+import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-messaging.js";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -21,26 +21,37 @@ const analytics = getAnalytics(app);
 // Inicializar el servicio de mensajería
 const messaging = getMessaging(app);
 
-// Solicitar permiso para recibir notificaciones
-Notification.requestPermission().then(permission => {
-  if (permission === 'granted') {
-    console.log('Permiso otorgado para notificaciones.');
+// Registrar tu Service Worker
+navigator.serviceWorker.register('sw.js').then((registration) => {
+    console.log('Service Worker registrado:', registration);
 
-    // Obtener el token de registro para enviar notificaciones
-    getToken(messaging, { vapidKey: 'BGvxRdsdfnqOKKjJCOnLNe6Fc7xJdn9pxhXnxOKJNWyuzOGsyH9715HfZlP254QaIxm4VpKpYI4AjvgeUjbWYtY' }).then(currentToken => {
-      if (currentToken) {
-        console.log('Token del dispositivo:', currentToken);
+    // Solicitar permiso para recibir notificaciones
+    Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+            console.log('Permiso otorgado para notificaciones.');
 
-        // Aquí puedes enviar este token a tu servidor para que lo almacene
-      } else {
-        console.log('No se pudo obtener el token.');
-      }
-    }).catch(err => {
-      console.error('Error al obtener el token:', err);
+            // Obtener el token de registro para enviar notificaciones
+            getToken(messaging, {
+                vapidKey: 'BGvxRdsdfnqOKKjJCOnLNe6Fc7xJdn9pxhXnxOKJNWyuzOGsyH9715HfZlP254QaIxm4VpKpYI4AjvgeUjbWYtY',
+                serviceWorkerRegistration: registration
+            }).then(currentToken => {
+                if (currentToken) {
+                    console.log('Token del dispositivo:', currentToken);
+
+                    // Aquí puedes enviar este token a tu servidor para que lo almacene
+                } else {
+                    console.log('No se pudo obtener el token.');
+                }
+            }).catch(err => {
+                console.error('Error al obtener el token:', err);
+            });
+        } else {
+            console.log('Permiso denegado para notificaciones.');
+        }
     });
-  } else {
-    console.log('Permiso denegado para notificaciones.');
-  }
+
+}).catch((error) => {
+    console.error('Error al registrar el Service Worker:', error);
 });
 
 console.log("Firebase inicializado correctamente.");
