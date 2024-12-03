@@ -1,3 +1,41 @@
+// Importar los scripts de Firebase para FCM
+importScripts("https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js");
+importScripts(
+  "https://www.gstatic.com/firebasejs/11.0.2/firebase-messaging.js"
+);
+
+// Configuración de Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCLATOoJaHm1ik6fCWHJYAkPgIhMQ5B5O4",
+  authDomain: "the-chill-spot-b94ae.firebaseapp.com",
+  projectId: "the-chill-spot-b94ae",
+  storageBucket: "the-chill-spot-b94ae.firebasestorage.app",
+  messagingSenderId: "519997067329",
+  appId: "1:519997067329:web:023cffe155db50c797f6c0",
+  measurementId: "G-NS2XWVYFF2",
+};
+
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Inicializar Firebase Messaging
+const messaging = firebase.messaging();
+
+// Manejar notificaciones en segundo plano
+messaging.onBackgroundMessage((payload) => {
+  console.log("[sw.js] Notificación recibida en segundo plano:", payload);
+
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: payload.notification.icon,
+  };
+
+  // Mostrar la notificación
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+// Mantén el resto del código de Workbox intacto
 if (!self.define) {
   let e,
     i = {};
@@ -11,7 +49,7 @@ if (!self.define) {
         } else (e = r), importScripts(r), i();
       }).then(() => {
         let e = i[r];
-        if (!e) throw new Error(`Module ${r} didn’t register its module`);
+        if (!e) throw new Error("Module ${r} didn’t register its module");
         return e;
       })
   );
