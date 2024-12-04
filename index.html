@@ -14,6 +14,18 @@
     />
     <link rel="stylesheet" href="css/estilos.css" />
     <link rel="manifest" href="manifest.json" />
+    <script
+      src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+      defer
+    ></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function (OneSignal) {
+        await OneSignal.init({
+          appId: "b559ed99-08d2-4807-a77b-5ed0c9f4eeae",
+        });
+      });
+    </script>
     <title>The Chill Spot</title>
   </head>
 
@@ -205,34 +217,37 @@
       </div>
     </footer>
 
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", async function () {
-                try {
-                    const registration = await navigator.serviceWorker.register("/service-worker.js");
-                    console.log("ServiceWorker registered with scope:", registration.scope);
-                    
-                    // Aquí inicializamos OneSignal después de registrar el Service Worker
-                    window.OneSignal = window.OneSignal || [];
-                    OneSignal.push(function() {
-                        OneSignal.init({
-                            appId: "b559ed99-08d2-4807-a77b-5ed0c9f4eeae",
-                        });
-
-                        // Solicitar permiso para recibir notificaciones
-                        OneSignal.getNotificationPermission().then(function(permission) {
-                            if (permission === "granted") {
-                                console.log("Permiso concedido para notificaciones.");
-                            }
-                        });
-                    });
-                } catch (err) {
-                    console.error("ServiceWorker registration failed:", err);
-                }
-            });
-        }
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/service-worker.js").then(
+            function (registration) {
+              console.log(
+                "ServiceWorker registered with scope:",
+                registration.scope
+              );
+            },
+            function (err) {
+              console.log("ServiceWorker registration failed:", err);
+            }
+          );
+        });
+        Notification.requestPermission().then(function (permission) {
+          if (permission === "granted") {
+            console.log("Permiso concedido para notificaciones.");
+          }
+        });
+      }
     </script>
+    <!-- <script src="https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "b559ed99-08d2-4807-a77b-5ed0c9f4eeae",
+        });
+      });
+    </script> -->
     <script src="js/jquery-1.12.3.min.js"></script>
     <script src="js/parallax.js"></script>
     <script src="js/efectos.js"></script>
