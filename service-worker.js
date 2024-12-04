@@ -1,4 +1,6 @@
-const CACHE_NAME = 'my-cache-v1';
+importScripts('/firebase-messaging-sw.js');
+
+const CACHE_NAME = 'my-cache-v2';
 
 const CACHE_ASSETS = [
   '/',

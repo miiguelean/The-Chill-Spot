@@ -14,18 +14,6 @@
     />
     <link rel="stylesheet" href="css/estilos.css" />
     <link rel="manifest" href="manifest.json" />
-    <script
-      src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
-      defer
-    ></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function (OneSignal) {
-        await OneSignal.init({
-          appId: "b559ed99-08d2-4807-a77b-5ed0c9f4eeae",
-        });
-      });
-    </script>
     <title>The Chill Spot</title>
   </head>
 
@@ -232,22 +220,20 @@
             }
           );
         });
-        Notification.requestPermission().then(function (permission) {
+      }
+      function askNotificationPermission() {
+        Notification.requestPermission().then((permission) => {
           if (permission === "granted") {
-            console.log("Permiso concedido para notificaciones.");
+            console.log("Permiso para notificaciones concedido.");
+          } else {
+            console.log("Permiso para notificaciones denegado.");
           }
         });
       }
+
+      askNotificationPermission();
     </script>
-    <!-- <script src="https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js" defer></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "b559ed99-08d2-4807-a77b-5ed0c9f4eeae",
-        });
-      });
-    </script> -->
+    <script src="js/app.js"></script>
     <script src="js/jquery-1.12.3.min.js"></script>
     <script src="js/parallax.js"></script>
     <script src="js/efectos.js"></script>
