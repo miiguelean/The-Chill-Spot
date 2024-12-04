@@ -11,7 +11,7 @@ function urlB64ToUint8Array(base64String) {
 }
 
 if ('serviceWorker' in navigator && 'PushManager' in window) {
-    navigator.serviceWorker.register('/ChillSpot/service-worker.js')
+    navigator.serviceWorker.register('/service-worker.js')
         .then(registration => {
             console.log('ServiceWorker registrado:', registration);
 
