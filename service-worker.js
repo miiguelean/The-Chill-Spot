@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my-cache-v1'; 
+const CACHE_NAME = 'my-cache-v1';
 
 const CACHE_ASSETS = [
   '/',
@@ -25,6 +25,7 @@ const CACHE_ASSETS = [
   '/img/icon.ico'
 ];
 
+// Evento de instalación
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -34,6 +35,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
+// Evento de activación
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -49,6 +51,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Evento de captura de solicitudes
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
@@ -65,6 +68,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
+// Evento de push
 self.addEventListener('push', (event) => {
   let data = {};
 
@@ -85,6 +89,7 @@ self.addEventListener('push', (event) => {
   );
 });
 
+// Evento de clic en notificación
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 

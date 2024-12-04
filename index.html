@@ -228,6 +228,15 @@
         });
       }
     </script>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "b559ed99-08d2-4807-a77b-5ed0c9f4eeae",
+        });
+      });
+    </script>
     <script src="js/jquery-1.12.3.min.js"></script>
     <script src="js/parallax.js"></script>
     <script src="js/efectos.js"></script>
