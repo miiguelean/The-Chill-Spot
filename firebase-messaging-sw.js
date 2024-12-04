@@ -1,8 +1,8 @@
-// Importa los scripts de Firebase
+// Cargar Firebase y el SDK de Messaging en el Service Worker
 importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js');
 
-// Configura Firebase
+// Configuración de Firebase (debe coincidir con la configuración en el main.js)
 const firebaseConfig = {
   apiKey: "AIzaSyCLATOoJaHm1ik6fCWHJYAkPgIhMQ5B5O4",
   authDomain: "the-chill-spot-b94ae.firebaseapp.com",
@@ -13,29 +13,27 @@ const firebaseConfig = {
   measurementId: "G-NS2XWVYFF2"
 };
 
+// Inicializar Firebase en el Service Worker
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// Manejo de la notificación en segundo plano
+// Manejar notificaciones en segundo plano
 messaging.onBackgroundMessage((payload) => {
-  console.log('Recibida notificación en segundo plano:', payload);
+  console.log('Mensaje recibido en segundo plano:', payload);
 
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
     icon: payload.notification.icon,
-    click_action: payload.notification.click_action, // Abre la URL en caso de hacer clic
+    click_action: payload.notification.click_action,
   };
 
+  // Mostrar la notificación
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// Manejando el evento de clic en la notificación
+// Manejo del clic en la notificación
 self.addEventListener('notificationclick', (event) => {
-  console.log('Notificación clickeada:', event.notification);
   event.notification.close();
-  // Abre la URL especificada en el `click_action`
-  event.waitUntil(
-    clients.openWindow(event.notification.click_action)
-  );
+  event.waitUntil(clients.openWindow(event.notification.click_action));
 });
