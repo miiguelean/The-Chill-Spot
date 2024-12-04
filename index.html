@@ -227,13 +227,25 @@
         });
       }
     </script>
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "b559ed99-08d2-4807-a77b-5ed0c9f4eeae",
-        });
+        try {
+          await OneSignal.init({
+            appId: "b559ed99-08d2-4807-a77b-5ed0c9f4eeae",
+          });
+    
+          OneSignal.push(() => {
+            OneSignal.getNotificationPermission().then((permission) => {
+              if (permission === "granted") {
+                console.log("Permiso concedido para notificaciones.");
+              }
+            });
+          });
+        } catch (error) {
+          console.error("Error al inicializar OneSignal:", error);
+        }
       });
     </script>
     <script src="js/jquery-1.12.3.min.js"></script>
