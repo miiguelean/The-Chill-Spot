@@ -24,16 +24,18 @@ function obtenerToken() {
       console.log('Permiso concedido');
       
       // Obtener el token FCM
-      getToken(messaging, { vapidKey: 'BGvxRdsdfnqOKKjJCOnLNe6Fc7xJdn9pxhXnxOKJNWyuzOGsyH9715HfZlP254QaIxm4VpKpYI4AjvgeUjbWYtY' }).then((currentToken) => {
-        if (currentToken) {
-          console.log('Token de FCM:', currentToken);
-          // Aquí puedes enviar el token al servidor para almacenarlo y enviarlo cuando sea necesario
-        } else {
-          console.log('No se pudo obtener el token');
-        }
-      }).catch((err) => {
-        console.log('Error al obtener el token:', err);
-      });
+      getToken(messaging, { vapidKey: 'BGvxRdsdfnqOKKjJCOnLNe6Fc7xJdn9pxhXnxOKJNWyuzOGsyH9715HfZlP254QaIxm4VpKpYI4AjvgeUjbWYtY' })
+        .then((currentToken) => {
+          if (currentToken) {
+            console.log('Token de FCM:', currentToken);
+            // Aquí puedes enviar el token al servidor para almacenarlo y enviarlo cuando sea necesario
+          } else {
+            console.log('No se pudo obtener el token');
+          }
+        })
+        .catch((err) => {
+          console.log('Error al obtener el token:', err);
+        });
     } else {
       console.log('Permiso denegado');
     }
@@ -44,6 +46,13 @@ function obtenerToken() {
 onMessage(messaging, (payload) => {
   console.log('Mensaje recibido en primer plano:', payload);
   // Aquí puedes mostrar una notificación, actualizar la interfaz de usuario, etc.
+  // Ejemplo:
+  if (Notification.permission === 'granted') {
+    new Notification(payload.notification.title, {
+      body: payload.notification.body,
+      icon: payload.notification.icon,
+    });
+  }
 });
 
 // Evento para suscribir al usuario cuando haga clic en el botón
@@ -53,14 +62,14 @@ document.getElementById('btn-notificar').addEventListener('click', () => {
 
 // Registrar el Service Worker para las notificaciones push de Firebase
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/firebase-messaging-sw.js').then((registration) => {
+  navigator.serviceWorker.register('../firebase-messaging-sw.js').then((registration) => {
     console.log('Firebase Messaging Service Worker registrado con éxito:', registration);
   }).catch((error) => {
     console.log('Error al registrar el Firebase Messaging Service Worker:', error);
   });
   
   // Opcional: Registrar otro Service Worker para otras funcionalidades como caché, si tienes un sw.js adicional
-  navigator.serviceWorker.register('/sw.js').then((registration) => {
+  navigator.serviceWorker.register('../sw.js').then((registration) => {
     console.log('Service Worker de caché registrado con éxito:', registration);
   }).catch((error) => {
     console.log('Error al registrar el Service Worker de caché:', error);
