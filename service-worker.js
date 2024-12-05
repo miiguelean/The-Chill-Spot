@@ -71,8 +71,8 @@ self.addEventListener("fetch", (event) => {
 // Evento de push
 self.addEventListener("push", (event) => {
   let data = {
-    title: "Notificación",
-    body: "¡Tienes un nuevo mensaje!",
+    title: "Oferta del día",
+    body: "Jueves de cocteles: ¡Berry Bliss Martini a solo $12!",
   };
 
   if (event.data) {
